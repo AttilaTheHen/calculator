@@ -14,37 +14,47 @@ function operate(numOne, numTwo, operator) {
   return operator(numOne, numTwo);
 }
 
-function displayNum(e) {
-  num += e.target.textContent;
+function displayNum() {
+  num += this.textContent;
   display.value = num;
+  calculate.disabled = false;
+  if (this.textContent == '.') {
+    this.disabled = true;
+  }
 }
 function clearNum() {
   while (display.value) {
     display.value = '';
     num = '';
+    numOne = '';
+    numTwo = '';
+    calculate.disabled = true;
+    decimal.disabled = false;
   }
 }
-function operateNum(e) {
+function operateNum() {
   if (numOne) {
-    numTwo = parseInt(num);
-    answer = operate(numOne, numTwo, operator);
-    display.value = answer;
+    equalNum();
     num = '';
     numOne = answer;
     operator = eval(this.id);
   } else {
-    numOne = parseInt(num);
+    numOne = parseFloat(num);
     operator = eval(this.id);
     num = '';
   }
+  decimal.disabled = false;
 }
 function equalNum() {
-  numTwo = parseInt(num);
+  numTwo = parseFloat(num);
   answer = operate(numOne, numTwo, operator);
-  display.value = answer;
-  num = '';
-  numOne = '';
-  numTwo = '';
+  if (numTwo == 0 && operator == divi) {
+    display.value = "TO INFINITY AND BEYOND!";
+  } else {
+    display.value = answer;
+    num = answer;
+  }
+  decimal.disabled = true;
 }
 
 let display = document.querySelector('input');
@@ -63,7 +73,11 @@ for (let j = 0; j < operations.length; j++) {
   const opButton = operations[j];
   opButton.addEventListener('click', operateNum)
 }
+const decimal = document.querySelector('#dec');
+decimal.addEventListener('click', displayNum);
+
 const calculate = document.querySelector('#calc');
 calculate.addEventListener('click', equalNum);
+calculate.disabled = true;
 const clear = document.querySelector('#clear');
 clear.addEventListener('click', clearNum);
