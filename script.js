@@ -18,9 +18,7 @@ function displayNum() {
   num += this.textContent;
   display.value = num;
   calculate.disabled = false;
-  if (this.textContent == '.') {
-    this.disabled = true;
-  }
+  if (this.textContent == '.') this.disabled = true;
 }
 function clearNum() {
   while (display.value) {
@@ -52,7 +50,8 @@ function equalNum() {
     display.value = "TO INFINITY AND BEYOND!";
   } else {
     display.value = answer;
-    num = answer;
+    numOne = answer;
+    numTwo = num;
   }
   decimal.disabled = true;
 }
@@ -65,17 +64,16 @@ let answer = '';
 
 const digits = document.getElementsByClassName('num');
 for (let i = 0; i < digits.length; i++) {
-  const test = digits[i];
-  test.addEventListener('click', displayNum);
+  const digit = digits[i];
+  digit.addEventListener('click', displayNum);
 }
 const operations = document.getElementsByClassName('operator');
 for (let j = 0; j < operations.length; j++) {
   const opButton = operations[j];
-  opButton.addEventListener('click', operateNum)
+  opButton.addEventListener('click', operateNum);
 }
 const decimal = document.querySelector('#dec');
 decimal.addEventListener('click', displayNum);
-
 const calculate = document.querySelector('#calc');
 calculate.addEventListener('click', equalNum);
 calculate.disabled = true;
