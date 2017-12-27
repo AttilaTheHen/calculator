@@ -19,6 +19,7 @@ function displayNum() {
   display.value = num;
   calculate.disabled = false;
   if (this.textContent == '.') this.disabled = true;
+  if (oper.disabled) oper.disabled = false;
 }
 function clearNum() {
   while (display.value) {
@@ -28,6 +29,7 @@ function clearNum() {
     numTwo = '';
     calculate.disabled = true;
     decimal.disabled = false;
+    oper.disabled = false;
   }
 }
 function operateNum() {
@@ -42,6 +44,8 @@ function operateNum() {
     num = '';
   }
   decimal.disabled = false;
+  oper = this;
+  oper.disabled = true;
 }
 function equalNum() {
   numTwo = parseFloat(num);
@@ -54,6 +58,7 @@ function equalNum() {
     numTwo = num;
   }
   decimal.disabled = true;
+  oper.disabled = false;
 }
 
 let display = document.querySelector('input');
@@ -61,6 +66,7 @@ let numOne = '';
 let numTwo = '';
 let num = '';
 let answer = '';
+let oper = '';
 
 const digits = document.getElementsByClassName('num');
 for (let i = 0; i < digits.length; i++) {
@@ -79,3 +85,5 @@ calculate.addEventListener('click', equalNum);
 calculate.disabled = true;
 const clear = document.querySelector('#clear');
 clear.addEventListener('click', clearNum);
+
+// Still need to add: keyboard support. Also keep tweaking styling. -12/27
