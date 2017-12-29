@@ -53,7 +53,7 @@ function equalNum() {
   if (numTwo == 0 && operator == divi) {
     display.value = "TO INFINITY AND BEYOND!";
   } else {
-    display.value = answer;
+    display.value = +answer.toFixed(10);
     numOne = answer;
     numTwo = num;
   }
@@ -85,5 +85,22 @@ calculate.addEventListener('click', equalNum);
 calculate.disabled = true;
 const clear = document.querySelector('#clear');
 clear.addEventListener('click', clearNum);
+
+// window.addEventListener('keydown', useKey);
+//
+// function useKey(e) {
+//   const key = document.querySelector(`button[data-key='${e.key}']`);
+//   if (key.classList == 'num') {
+//     displayNum(key);
+//   } else if (key.classList == 'operator') {
+//     operateNum(key);
+//   } else if (key.classList == 'equals') {
+//     equalNum(key);
+//   } else if (key.classList == 'dot') {
+//     displayNum(key);
+//   } else {
+//     clearNum(key);
+//   }
+// }
 
 // Still need to add: keyboard support. Also keep tweaking styling. -12/27
