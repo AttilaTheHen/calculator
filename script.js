@@ -21,8 +21,9 @@ function operate(numOne, numTwo, operator) {
 function displayNum() {
   num += this.textContent;
   display.value = num;
-  if (this.textContent == '.') this.disabled = true;
+  if (this.textContent == '.') decimal.disabled = true;
   enableButtons();
+  calculate.disabled = false;
 }
 
 function clearNum() {
@@ -32,21 +33,30 @@ function clearNum() {
     numOne = '';
     numTwo = '';
   }
-  enableButtons();
+  disableButtons();
+  calculate.disabled = true;
+  decimal.disabled = false;
 }
 
 function operateNum() {
   if (numOne) {
-    equalNum();
-    num = '';
-    numOne = answer;
-    operator = eval(this.id);
+    if (equalNum.called) {
+      numTwo = '';
+      num = '';
+      operator = eval(this.id);
+    } else {
+      equalNum();
+      num = '';
+      numOne = answer;
+      operator = eval(this.id);
+    }
   } else {
     numOne = parseFloat(num);
     operator = eval(this.id);
     num = '';
   }
   disableButtons();
+  decimal.disabled = false;
 }
 
 function equalNum() {
@@ -60,6 +70,8 @@ function equalNum() {
     numTwo = num;
   }
   enableButtons();
+  equalNum.called = true;
+  decimal.disabled = false;
 }
 
 function disableButtons() {
@@ -76,36 +88,35 @@ function enableButtons() {
   }
 }
 
-  let display = document.querySelector('input');
-  let numOne = '';
-  let numTwo = '';
-  let num = '';
-  let answer = '';
-  let counter = 0;
+let display = document.querySelector('input');
+let numOne = '';
+let numTwo = '';
+let num = '';
+let answer = '';
+let counter = 0;
 
-  const digits = document.getElementsByClassName('num');
-  for (let i = 0; i < digits.length; i++) {
-    const digit = digits[i];
-    digit.addEventListener('click', displayNum);
-  }
-  const operations = document.getElementsByClassName('operator');
-  for (let j = 0; j < operations.length; j++) {
-    const opButton = operations[j];
-    opButton.addEventListener('click', operateNum);
-  }
-  const decimal = document.querySelector('#dec');
-  decimal.addEventListener('click', displayNum);
-  const calculate = document.querySelector('#calc');
-  calculate.addEventListener('click', equalNum);
-  const clear = document.querySelector('#clear');
-  clear.addEventListener('click', clearNum);
-
-  // window.addEventListener('keydown', useKey);
-  //
-  // function useKey(event) {
-  //   var key = event.key;
-  //   displayNum2(key);
-  // }
-  // Still need to add: keyboard support. Also keep tweaking styling. -12/27
-  // Create global var called keyDisable, another called CalcState - 12/29
-  // Add keyboard support. Just implemented better disableOp function? Still need to disable decimal as well. -12/30
+const digits = document.getElementsByClassName('num');
+for (let i = 0; i < digits.length; i++) {
+  const digit = digits[i];
+  digit.addEventListener('click', displayNum);
+}
+const operations = document.getElementsByClassName('operator');
+for (let j = 0; j < operations.length; j++) {
+  const opButton = operations[j];
+  opButton.addEventListener('click', operateNum);
+}
+const decimal = document.querySelector('#dec');
+decimal.addEventListener('click', displayNum);
+const calculate = document.querySelector('#calc');
+calculate.addEventListener('click', equalNum);
+const clear = document.querySelector('#clear');
+clear.addEventListener('click', clearNum);
+disableButtons();
+calculate.disabled = true;
+// window.addEventListener('keydown', useKey);
+//
+// function useKey(event) {
+//   var key = event.key;
+//   displayNum2(key);
+// }
+// Still need to add: keyboard support. Also keep tweaking styling. -12/27
