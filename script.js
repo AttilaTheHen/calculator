@@ -1,27 +1,59 @@
-function add(numOne, numTwo) {
-  return numOne + numTwo;
+let display = document.querySelector('input');
+let numOne = '';
+let numTwo = '';
+let num = '';
+let answer = '';
+let counter = 0;
+
+const digits = document.getElementsByClassName('num');
+for (let i = 0; i < digits.length; i++) {
+  const digit = digits[i];
+  digit.addEventListener('click', displayMouse);
+}
+const operations = document.getElementsByClassName('operator');
+for (let j = 0; j < operations.length; j++) {
+  const opButton = operations[j];
+  opButton.addEventListener('click', operateNum);
+}
+const decimal = document.querySelector('#dec');
+decimal.addEventListener('click', displayMouse);
+const calculate = document.querySelector('#calc');
+calculate.addEventListener('click', equalNum);
+const clear = document.querySelector('#clear');
+clear.addEventListener('click', clearNum);
+disableButtons();
+calculate.disabled = true;
+window.addEventListener('keydown', useKey);
+
+function useKey(e) {
+  if (!isNaN(e.key)) {
+    displayKey(e.key)
+  } else if (e.key == '+') {
+    operateNumKey(add);
+  } else if (e.key == '-') {
+    operateNumKey(sub);
+  } else if (e.key == '*') {
+    operateNumKey(mult);
+  } else if (e.key == '/') {
+    operateNumKey(divi);
+  } else if (e.key == '.') {
+    // Disable! And same for all other operation keys! -1/2
+    displayKey(e.key);
+  } else if (e.key == 'Backspace') {
+    clearNum();
+  } else if (e.key == 'Enter') {
+    equalNum();
+  }
 }
 
-function sub(numOne, numTwo) {
-  return numOne - numTwo;
+function displayMouse() {
+  displayKey(this.textContent);
 }
 
-function mult(numOne, numTwo) {
-  return numOne * numTwo;
-}
-
-function divi(numOne, numTwo) {
-  return numOne / numTwo;
-}
-
-function operate(numOne, numTwo, operator) {
-  return operator(numOne, numTwo);
-}
-
-function displayNum() {
-  num += this.textContent;
+function displayKey(e) {
+  num += e;
   display.value = num;
-  if (this.textContent == '.') decimal.disabled = true;
+  if (e == '.') decimal.disabled = true;
   enableButtons();
   calculate.disabled = false;
 }
@@ -38,25 +70,29 @@ function clearNum() {
   decimal.disabled = false;
 }
 
-function operateNum() {
+function operateNumKey(e) {
   if (numOne) {
     if (equalNum.called) {
       numTwo = '';
       num = '';
-      operator = eval(this.id);
+      operator = eval(e);
     } else {
       equalNum();
       num = '';
       numOne = answer;
-      operator = eval(this.id);
+      operator = eval(e);
     }
   } else {
     numOne = parseFloat(num);
-    operator = eval(this.id);
+    operator = eval(e);
     num = '';
   }
   disableButtons();
   decimal.disabled = false;
+}
+
+function operateNum() {
+  operateNumKey(this.id);
 }
 
 function equalNum() {
@@ -88,35 +124,22 @@ function enableButtons() {
   }
 }
 
-let display = document.querySelector('input');
-let numOne = '';
-let numTwo = '';
-let num = '';
-let answer = '';
-let counter = 0;
+function add(numOne, numTwo) {
+  return numOne + numTwo;
+}
 
-const digits = document.getElementsByClassName('num');
-for (let i = 0; i < digits.length; i++) {
-  const digit = digits[i];
-  digit.addEventListener('click', displayNum);
+function sub(numOne, numTwo) {
+  return numOne - numTwo;
 }
-const operations = document.getElementsByClassName('operator');
-for (let j = 0; j < operations.length; j++) {
-  const opButton = operations[j];
-  opButton.addEventListener('click', operateNum);
+
+function mult(numOne, numTwo) {
+  return numOne * numTwo;
 }
-const decimal = document.querySelector('#dec');
-decimal.addEventListener('click', displayNum);
-const calculate = document.querySelector('#calc');
-calculate.addEventListener('click', equalNum);
-const clear = document.querySelector('#clear');
-clear.addEventListener('click', clearNum);
-disableButtons();
-calculate.disabled = true;
-// window.addEventListener('keydown', useKey);
-//
-// function useKey(event) {
-//   var key = event.key;
-//   displayNum2(key);
-// }
-// Still need to add: keyboard support. Also keep tweaking styling. -12/27
+
+function divi(numOne, numTwo) {
+  return numOne / numTwo;
+}
+
+function operate(numOne, numTwo, operator) {
+  return operator(numOne, numTwo);
+}
