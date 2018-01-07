@@ -4,6 +4,7 @@ let numTwo = '';
 let num = '';
 let answer = '';
 let counter = 0;
+let fired = false;
 
 const digits = document.getElementsByClassName('num');
 for (let i = 0; i < digits.length; i++) {
@@ -23,34 +24,31 @@ const clear = document.querySelector('#clear');
 clear.addEventListener('click', clearNum);
 disableButtons();
 calculate.disabled = true;
-window.addEventListener('keydown', useKey);
+document.addEventListener('keydown', useKey);
 
 function useKey(e) {
-  if (!isNaN(e.key)) {
-    displayKey(e.key)
-  } else if (e.key == '+') {
-    operateNumKey(add);
-  } else if (e.key == '-') {
-    operateNumKey(sub);
-  } else if (e.key == '*') {
-    operateNumKey(mult);
-  } else if (e.key == '/') {
-    operateNumKey(divi);
-  } else if (e.key == '.') {
-    // Disable! And same for all other operation keys! -1/2
-    displayKey(e.key);
-  } else if (e.key == 'Backspace') {
-    clearNum();
-  } else if (e.key == 'Enter') {
-    equalNum();
-  }
+  if (!isNaN(e.key)) displayKey(e.key)
+  else if (e.key == '+') operateNumKey(add);
+  else if (e.key == '-') operateNumKey(sub);
+  else if (e.key == '*') operateNumKey(mult);
+  else if (e.key == '/') operateNumKey(divi);
+  else if (e.key == '.') displayKey(e.key);
+  else if (e.key == 'Backspace') clearNum();
+  else if (e.key == 'Enter') equalNum();
 }
 
 function displayMouse() {
   displayKey(this.textContent);
 }
 
+// NEED TO FIX FUNCTIONALITY - when calling equalNum and finishing calculation, the program currently properly takes it from there if you call another operation on it. For instance, 3 + 5 = 8. + 2 = 10. This all works properly. Need to make it so that this happens AND if you instead just start inputting a number instead of an operation with clearing, then it automatically clears. For instance, currently if you do 3 + 5 = 8. 2 + ... it'll just add 2 to 5 and make it 52. Trying to fiddle with the displayKey function and with the first 'if' statement right now. I've commented it out for now. -1/6
+
 function displayKey(e) {
+  // if (display.value && equalNum.called) {
+  //   num = '';
+  //   numOne = '';
+  //   numTwo = '';
+  // }
   num += e;
   display.value = num;
   if (e == '.') decimal.disabled = true;
@@ -68,6 +66,7 @@ function clearNum() {
   disableButtons();
   calculate.disabled = true;
   decimal.disabled = false;
+  equalNum.called = false;
 }
 
 function operateNumKey(e) {
