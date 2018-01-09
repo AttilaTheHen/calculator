@@ -41,7 +41,9 @@ function displayMouse() {
 
 function displayKey(e) {
   if (numTwo) {
-    clearNum();
+    if (equalNum.called) {
+      clearNum();
+    }
   }
   num += e;
   display.value = num;
@@ -71,9 +73,9 @@ function operateNumKey(e) {
       num = '';
       operator = eval(e);
     } else {
-      equalNum();
+      softEqual();
       num = '';
-      numOne = answer;
+      numTwo = '';
       operator = eval(e);
     }
   } else {
@@ -84,7 +86,7 @@ function operateNumKey(e) {
   disableButtons();
   decimal.disabled = false;
 }
-
+// 12 + (num1=12, num='') 7 - (num2=7, num1=19, num=7, num='', num2='') 5 * (num2=5, num1=14, num=5, num='', num2='') 3 = (num2=3, num1=42, num=3) 42; - 2 = 124?
 function operateNum() {
   operateNumKey(this.id);
 }
@@ -96,12 +98,18 @@ function equalNum() {
     display.value = "TO INFINITY AND BEYOND!";
   } else {
     display.value = +answer.toFixed(10);
-    numOne = answer;
-    numTwo = num;
+    numOne = answer; // 19
+    // numTwo = num; // 7 -> ''
+    num = numTwo;
   }
   enableButtons();
   equalNum.called = true;
   decimal.disabled = false;
+}
+
+function softEqual() {
+  equalNum();
+  equalNum.called = false;
 }
 
 function disableButtons() {
