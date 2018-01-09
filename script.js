@@ -24,15 +24,23 @@ disableButtons();
 calculate.disabled = true;
 document.addEventListener('keydown', useKey);
 
+let decKey = false;
+
 function useKey(e) {
   if (!isNaN(e.key)) displayKey(e.key)
   else if (e.key == '+') operateNumKey(add);
   else if (e.key == '-') operateNumKey(sub);
   else if (e.key == '*') operateNumKey(mult);
   else if (e.key == '/') operateNumKey(divi);
-  else if (e.key == '.') displayKey(e.key);
+  else if (e.key == '.') {
+    if (!decKey) {
+      displayKey(e.key);
+      decKey = true;
+    }
+  }
   else if (e.key == 'Backspace') clearNum();
   else if (e.key == 'Enter') equalNum();
+  else if (e.key == '=') equalNum();
 }
 
 function displayMouse() {
