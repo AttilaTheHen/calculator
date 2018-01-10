@@ -3,15 +3,17 @@ let numOne = '';
 let numTwo = '';
 let num = '';
 let answer = '';
+let decKey = false;
+let operandButton = '';
 
 const digits = document.getElementsByClassName('num');
-for (let i = 0; i < digits.length; i++) {
-  const digit = digits[i];
+for (let j = 0; j < digits.length; j++) {
+  const digit = digits[j];
   digit.addEventListener('click', displayMouse);
 }
 const operations = document.getElementsByClassName('operator');
-for (let j = 0; j < operations.length; j++) {
-  const opButton = operations[j];
+for (let k = 0; k < operations.length; k++) {
+  let opButton = operations[k];
   opButton.addEventListener('click', operateNum);
 }
 const decimal = document.querySelector('#dec');
@@ -24,7 +26,6 @@ disableButtons();
 calculate.disabled = true;
 document.addEventListener('keydown', useKey);
 
-let decKey = false;
 
 function useKey(e) {
   if (!isNaN(e.key)) displayKey(e.key)
@@ -50,7 +51,7 @@ function displayMouse() {
 function displayKey(e) {
   if (numTwo) {
     if (equalNum.called) {
-      clearNum();
+      softClear();
     }
   }
   num += e;
@@ -58,7 +59,16 @@ function displayKey(e) {
   if (e == '.') decimal.disabled = true;
   enableButtons();
   calculate.disabled = false;
+  let button = document.querySelector('#' + 'b' + e);
+  button.classList.add('button-transition');
 }
+
+function removeTransition(e) {
+  this.classList.remove('button-transition');
+}
+
+const numButtons = document.querySelectorAll('.num, .use, .dot, .equals');
+numButtons.forEach(numButton => numButton.addEventListener('transitionend', removeTransition));
 
 function clearNum() {
   while (display.value) {
@@ -72,6 +82,25 @@ function clearNum() {
   calculate.disabled = true;
   decimal.disabled = false;
   equalNum.called = false;
+  decKey = false;
+  let button = document.querySelector('#clear');
+  button.classList.add('button-transition');
+  operandButton.classList.remove('button-selected');
+}
+
+function softClear() {
+  while (display.value) {
+    display.value = '';
+    num = '';
+    numOne = '';
+    numTwo = '';
+    answer = '';
+  }
+  disableButtons();
+  calculate.disabled = true;
+  decimal.disabled = false;
+  equalNum.called = false;
+  decKey = false;
 }
 
 function operateNumKey(e) {
@@ -86,18 +115,50 @@ function operateNumKey(e) {
       numTwo = '';
       operator = eval(e);
     }
+    if (operandButton) {
+      operandButton.classList.remove('button-selected');
+      operandButton = document.querySelector('#' + e.name);
+      operandButton.classList.add('button-selected');
+    }
   } else {
     numOne = parseFloat(num);
     operator = eval(e);
     num = '';
+    operandButton = document.querySelector('#' + e.name);
+    operandButton.classList.add('button-selected');
   }
   disableButtons();
   decimal.disabled = false;
+  decKey = false;
 }
-// 12 + (num1=12, num='') 7 - (num2=7, num1=19, num=7, num='', num2='') 5 * (num2=5, num1=14, num=5, num='', num2='') 3 = (num2=3, num1=42, num=3) 42; - 2 = 124?
+
 function operateNum() {
-  operateNumKey(this.id);
-}
+  if (numOne) {
+    if (equalNum.called) {
+      numTwo = '';
+      num = '';
+      operator = eval(this.id);
+    } else {
+      softEqual();
+      num = '';
+      numTwo = '';
+      operator = eval(this.id);
+    }
+    if (operandButton) {
+      operandButton.classList.remove('button-selected');
+      operandButton = document.querySelector('#' + this.id);
+      operandButton.classList.add('button-selected');
+    }
+  } else {
+    numOne = parseFloat(num);
+    operator = eval(this.id);
+    num = '';
+    operandButton = document.querySelector('#' + this.id);
+    operandButton.classList.add('button-selected');
+  }
+  disableButtons();
+  decimal.disabled = false;
+  decKey = false;}
 
 function equalNum() {
   numTwo = parseFloat(num);
@@ -106,30 +167,43 @@ function equalNum() {
     display.value = "TO INFINITY AND BEYOND!";
   } else {
     display.value = +answer.toFixed(10);
-    numOne = answer; // 19
-    // numTwo = num; // 7 -> ''
+    numOne = answer;
     num = numTwo;
   }
   enableButtons();
   equalNum.called = true;
   decimal.disabled = false;
+  decKey = false;
+  let button = document.querySelector('#calc');
+  button.classList.add('button-transition');
+  operandButton.classList.remove('button-selected');
 }
 
 function softEqual() {
-  equalNum();
-  equalNum.called = false;
+  numTwo = parseFloat(num);
+  answer = operate(numOne, numTwo, operator);
+  if (numTwo == 0 && operator == divi) {
+    display.value = "TO INFINITY AND BEYOND!";
+  } else {
+    display.value = +answer.toFixed(10);
+    numOne = answer;
+    num = numTwo;
+  }
+  enableButtons();
+  decimal.disabled = false;
+  decKey = false;
 }
 
 function disableButtons() {
-  for (let k = 0; k < operations.length; k++) {
-    const operButton = operations[k];
+  for (let i = 0; i < operations.length; i++) {
+    const operButton = operations[i];
     operButton.disabled = true;
   }
 }
 
 function enableButtons() {
-  for (let k = 0; k < operations.length; k++) {
-    const operButton = operations[k];
+  for (let i = 0; i < operations.length; i++) {
+    const operButton = operations[i];
     operButton.disabled = false;
   }
 }

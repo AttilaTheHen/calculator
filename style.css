@@ -13,13 +13,28 @@ body {
 
 .panel {
   width: 475px;
-  height: 350px;
+  height: 390px;
   margin-left: auto;
   margin-right: auto;
-  background-color: silver;
+  background-color: lightskyblue;
   padding-top: 25px;
   padding-bottom: 25px;
+  border-radius: 5px;
 }
+
+.button-selected {
+  background-color: lightsalmon;
+  transition: .2s;
+}
+
+.button-transition {
+  background-color: lightsalmon;
+  transition: .05s;
+}
+
+/* .num {
+  background-color: white;
+} */
 
 p {
   text-align: center;
@@ -30,17 +45,27 @@ p {
 button {
   height: 50px;
   width: 100px;
-  font-size: 20px;
+  font-size: 25px;
   margin-left: 2.5px;
   margin-right: 2.5px;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  color: initial;
+  padding: 2px 6px 3px;
+  transition: 1s;
+  outline: none;
 }
 
 input {
-  height: 40px;
+  height: 80px;
   width: 412px;
-  font-size: 20px;
+  font-size: 35px;
+  font-weight: bold;
   text-align: right;
-  padding-right: 10px;
+  padding-right: 15px;
+  border: none;
+  border-radius: 5px;
 }
 
 #b0 {
