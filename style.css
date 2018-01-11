@@ -32,10 +32,6 @@ body {
   transition: .05s;
 }
 
-/* .num {
-  background-color: white;
-} */
-
 p {
   text-align: center;
   margin: 0 auto;
@@ -54,7 +50,7 @@ button {
   color: initial;
   padding: 2px 6px 3px;
   transition: 1s;
-  outline: none;
+  /* outline: none; */
 }
 
 input {

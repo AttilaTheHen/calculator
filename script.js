@@ -3,8 +3,12 @@ let numOne = '';
 let numTwo = '';
 let num = '';
 let answer = '';
-let decKey = false;
+let decKeyDisabled = false;
+let opKeyDisabled = true;
+let calcKeyDisabled = true;
 let operandButton = '';
+let numberButton = '';
+let dotButton = '';
 
 const digits = document.getElementsByClassName('num');
 for (let j = 0; j < digits.length; j++) {
@@ -16,32 +20,55 @@ for (let k = 0; k < operations.length; k++) {
   let opButton = operations[k];
   opButton.addEventListener('click', operateNum);
 }
+const clear = document.querySelector('#clear');
+clear.addEventListener('click', clearNum);
 const decimal = document.querySelector('#dec');
 decimal.addEventListener('click', displayMouse);
 const calculate = document.querySelector('#calc');
 calculate.addEventListener('click', equalNum);
-const clear = document.querySelector('#clear');
-clear.addEventListener('click', clearNum);
 disableButtons();
 calculate.disabled = true;
 document.addEventListener('keydown', useKey);
 
-
 function useKey(e) {
+  document.activeElement.blur();
   if (!isNaN(e.key)) displayKey(e.key)
-  else if (e.key == '+') operateNumKey(add);
-  else if (e.key == '-') operateNumKey(sub);
-  else if (e.key == '*') operateNumKey(mult);
-  else if (e.key == '/') operateNumKey(divi);
-  else if (e.key == '.') {
-    if (!decKey) {
+  else if (e.key == '+') {
+    if (!opKeyDisabled) {
+      operateNumKey(add);
+      opKeyDisabled = true;
+    }
+  } else if (e.key == '-') {
+    if (!opKeyDisabled) {
+      operateNumKey(sub);
+      opKeyDisabled = true;
+    }
+  } else if (e.key == '*') {
+    if (!opKeyDisabled) {
+      operateNumKey(mult);
+      opKeyDisabled = true;
+    }
+  } else if (e.key == '/') {
+    if (!opKeyDisabled) {
+      operateNumKey(divi);
+      opKeyDisabled = true;
+    }
+  } else if (e.key == '.') {
+    if (!decKeyDisabled) {
       displayKey(e.key);
-      decKey = true;
+      decKeyDisabled = true;
+    }
+  } else if (e.key == 'Backspace') {
+    clearNum();
+  } else if (e.key == 'Enter') {
+    if (!calcKeyDisabled) {
+      equalNum();
+    }
+  } else if (e.key == '=') {
+    if (!calcKeyDisabled) {
+      equalNum();
     }
   }
-  else if (e.key == 'Backspace') clearNum();
-  else if (e.key == 'Enter') equalNum();
-  else if (e.key == '=') equalNum();
 }
 
 function displayMouse() {
@@ -54,16 +81,26 @@ function displayKey(e) {
       softClear();
     }
   }
+  if (numOne) {
+    calcKeyDisabled = false;
+  }
   num += e;
   display.value = num;
-  if (e == '.') decimal.disabled = true;
+  if (e == '.') {
+    decimal.disabled = true;
+    decKeyDisabled = true;
+    dotButton = document.querySelector('#dec');
+    dotButton.classList.add('button-transition');
+  } else {
+    numberButton = document.querySelector('#' + 'b' + e);
+    numberButton.classList.add('button-transition');
+  }
   enableButtons();
+  opKeyDisabled = false;
   calculate.disabled = false;
-  let button = document.querySelector('#' + 'b' + e);
-  button.classList.add('button-transition');
 }
 
-function removeTransition(e) {
+function removeTransition() {
   this.classList.remove('button-transition');
 }
 
@@ -79,13 +116,17 @@ function clearNum() {
     answer = '';
   }
   disableButtons();
+  opKeyDisabled = true;
   calculate.disabled = true;
   decimal.disabled = false;
   equalNum.called = false;
-  decKey = false;
+  decKeyDisabled = false;
   let button = document.querySelector('#clear');
   button.classList.add('button-transition');
-  operandButton.classList.remove('button-selected');
+  if (operandButton) {
+    operandButton.classList.remove('button-selected');
+  }
+  calcKeyDisabled = true;
 }
 
 function softClear() {
@@ -100,7 +141,9 @@ function softClear() {
   calculate.disabled = true;
   decimal.disabled = false;
   equalNum.called = false;
-  decKey = false;
+  decKeyDisabled = false;
+  opKeyDisabled = true;
+  calcKeyDisabled = true;
 }
 
 function operateNumKey(e) {
@@ -129,7 +172,8 @@ function operateNumKey(e) {
   }
   disableButtons();
   decimal.disabled = false;
-  decKey = false;
+  decKeyDisabled = false;
+  opKeyDisabled = true;
 }
 
 function operateNum() {
@@ -158,7 +202,10 @@ function operateNum() {
   }
   disableButtons();
   decimal.disabled = false;
-  decKey = false;}
+  decKeyDisabled = false;
+  opKeyDisabled = true;
+  calcKeyDisabled = true;
+}
 
 function equalNum() {
   numTwo = parseFloat(num);
@@ -171,9 +218,10 @@ function equalNum() {
     num = numTwo;
   }
   enableButtons();
+  opKeyDisabled = false;
   equalNum.called = true;
   decimal.disabled = false;
-  decKey = false;
+  decKeyDisabled = false;
   let button = document.querySelector('#calc');
   button.classList.add('button-transition');
   operandButton.classList.remove('button-selected');
@@ -190,8 +238,9 @@ function softEqual() {
     num = numTwo;
   }
   enableButtons();
+  opKeyDisabled = false;
   decimal.disabled = false;
-  decKey = false;
+  decKeyDisabled = false;
 }
 
 function disableButtons() {
