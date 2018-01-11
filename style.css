@@ -47,9 +47,10 @@ button {
   border: none;
   border-radius: 5px;
   font-weight: bold;
-  color: initial;
+  background-color: white;
   padding: 2px 6px 3px;
   transition: 1s;
+  color: initial;
   /* outline: none; */
 }
 
