@@ -28,6 +28,8 @@ const calculate = document.querySelector('#calc');
 calculate.addEventListener('click', equalNum);
 disableButtons();
 calculate.disabled = true;
+const numButtons = document.querySelectorAll('.num, .use, .dot, .equals');
+numButtons.forEach(numButton => numButton.addEventListener('transitionend', removeTransition));
 document.addEventListener('keydown', useKey);
 
 function useKey(e) {
@@ -104,9 +106,6 @@ function removeTransition() {
   this.classList.remove('button-transition');
 }
 
-const numButtons = document.querySelectorAll('.num, .use, .dot, .equals');
-numButtons.forEach(numButton => numButton.addEventListener('transitionend', removeTransition));
-
 function clearNum() {
   while (display.value) {
     display.value = '';
@@ -172,6 +171,7 @@ function operateNumKey(e) {
   }
   disableButtons();
   decimal.disabled = false;
+  calculate.disabled = true;
   decKeyDisabled = false;
   opKeyDisabled = true;
 }
@@ -202,6 +202,7 @@ function operateNum() {
   }
   disableButtons();
   decimal.disabled = false;
+  calculate.disabled = true;
   decKeyDisabled = false;
   opKeyDisabled = true;
   calcKeyDisabled = true;
