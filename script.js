@@ -212,15 +212,27 @@ function equalNum() {
   numTwo = parseFloat(num);
   answer = operate(numOne, numTwo, operator);
   if (numTwo == 0 && operator == divi) {
-    display.value = "TO INFINITY AND BEYOND!";
+    display.value = "INFINITY!";
+    num = '';
+    numOne = '';
+    numTwo = '';
+    answer = '';
+    disableButtons();
+    calculate.disabled = true;
+    equalNum.called = false;
+    opKeyDisabled = true;
+    calcKeyDisabled = true;
   } else {
     display.value = +answer.toFixed(10);
     numOne = answer;
     num = numTwo;
+    opKeyDisabled = false;
+    enableButtons();
+    equalNum.called = true;
   }
-  enableButtons();
-  opKeyDisabled = false;
-  equalNum.called = true;
+  // enableButtons();
+  // opKeyDisabled = false;
+  // equalNum.called = true;
   decimal.disabled = false;
   decKeyDisabled = false;
   let button = document.querySelector('#calc');
@@ -232,14 +244,26 @@ function softEqual() {
   numTwo = parseFloat(num);
   answer = operate(numOne, numTwo, operator);
   if (numTwo == 0 && operator == divi) {
-    display.value = "TO INFINITY AND BEYOND!";
+    display.value = "INFINITY!";
+    num = '';
+    numOne = '';
+    numTwo = '';
+    answer = '';
+    disableButtons();
+    calculate.disabled = true;
+    equalNum.called = false;
+    opKeyDisabled = true;
+    calcKeyDisabled = true;
   } else {
     display.value = +answer.toFixed(10);
     numOne = answer;
     num = numTwo;
+    opKeyDisabled = false;
+    enableButtons();
+    equalNum.called = true;
   }
-  enableButtons();
-  opKeyDisabled = false;
+  // enableButtons();
+  // opKeyDisabled = false;
   decimal.disabled = false;
   decKeyDisabled = false;
 }
